@@ -21,6 +21,12 @@ from app.components.charts import (
     render_rate_trends,
     render_transactions,
 )
+from app.components.panels import (
+    render_housing_panel,
+    render_economic_panel,
+    render_regional_panel,
+    render_footer,
+)
 
 
 def main():
@@ -99,12 +105,26 @@ def main():
             st.markdown("---")
             render_transactions(data.housing, region, time_range)
 
-    # Deep dive panels placeholder (Phase 8)
+    # Deep dive panels
     st.markdown("---")
-    _render_panels_placeholder(data)
+    st.subheader("Deep Dive")
+
+    panel_cols = st.columns(3)
+
+    with panel_cols[0]:
+        if data.housing:
+            render_housing_panel(data.housing, region)
+
+    with panel_cols[1]:
+        if data.economic:
+            render_economic_panel(data.economic)
+
+    with panel_cols[2]:
+        if data.housing:
+            render_regional_panel(data.housing)
 
     # Footer
-    _render_footer()
+    render_footer(data.metadata)
 
 
 def _load_styles():
@@ -115,45 +135,6 @@ def _load_styles():
             f"<style>{css_path.read_text()}</style>",
             unsafe_allow_html=True,
         )
-
-
-def _render_panels_placeholder(data):
-    """Placeholder for deep dive panels (Phase 8)."""
-    st.subheader("Deep Dive Panels")
-
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        st.markdown("##### Housing Composition")
-        st.info("Property type breakdown will be implemented in Phase 8.")
-
-    with col2:
-        st.markdown("##### Economic Context")
-        if data.economic:
-            st.write(f"- Data points: {len(data.economic)}")
-            if data.economic.metrics:
-                st.write(f"- Current CPI: {data.economic.metrics.current_cpi:.1f}%")
-                st.write(f"- Employment Rate: {data.economic.metrics.current_employment:.1f}%")
-        else:
-            st.write("No economic data available")
-        st.info("Full economic panel will be implemented in Phase 8.")
-
-    with col3:
-        st.markdown("##### Regional Spotlight")
-        st.info("Regional comparison panel will be implemented in Phase 8.")
-
-
-def _render_footer():
-    """Render dashboard footer with data attribution."""
-    st.markdown(
-        """
-        <div class="footer">
-            <p>Data sources: Bank of England, HM Land Registry, Office for National Statistics</p>
-            <p>UK Housing & Economic Dashboard - Portfolio Project</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
 
 
 if __name__ == "__main__":
