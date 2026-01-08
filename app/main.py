@@ -12,7 +12,15 @@ import streamlit as st
 from app.config import Config
 from app.state import StateManager
 from app.services.data_service import DataService
-from app.components.filters import render_filters, get_date_range
+from app.components.filters import render_filters
+from app.components.header import render_header
+from app.components.hero_metrics import render_hero_metrics
+from app.components.charts import (
+    render_rates_vs_prices,
+    render_regional_heat_map,
+    render_rate_trends,
+    render_transactions,
+)
 
 
 def main():
@@ -36,9 +44,6 @@ def main():
     # Initialize data service
     data_service = DataService(cache_dir=config.cache_dir)
 
-    # Header
-    _render_header(state)
-
     # Check for refresh trigger
     force_refresh = state.should_force_refresh()
 
@@ -48,6 +53,9 @@ def main():
 
     # Clear refresh flag
     state.clear_refresh_flag()
+
+    # Header with refresh controls
+    render_header(data.metadata, on_refresh=state.trigger_refresh)
 
     # Show warnings if any
     if data.has_errors:
@@ -59,27 +67,44 @@ def main():
             for warning in data.warnings:
                 st.info(warning)
 
+    # Hero metrics
+    if data.monetary:
+        render_hero_metrics(data, selected_region=state.region)
+
     # Filters
     st.markdown("---")
     time_range, region = render_filters(state)
 
-    # Get date range for filtering
-    start_date, end_date = get_date_range(time_range)
-
-    # Data status section
+    # Main content area - two columns
     st.markdown("---")
-    _render_data_status(data)
+    left_col, right_col = st.columns([3, 2])
 
-    # Main content placeholder (components added in Phase 7)
-    st.markdown("---")
-    _render_main_content_placeholder(data, time_range, region)
+    with left_col:
+        # Dual-axis chart: rates vs prices
+        if data.monetary and data.housing:
+            render_rates_vs_prices(data, time_range, region)
 
-    # Deep dive panels placeholder (components added in Phase 8)
+        # Regional heat map
+        if data.housing:
+            st.markdown("---")
+            render_regional_heat_map(data.housing)
+
+    with right_col:
+        # Rate trends chart
+        if data.monetary:
+            render_rate_trends(data.monetary, time_range)
+
+        # Transactions chart
+        if data.housing:
+            st.markdown("---")
+            render_transactions(data.housing, region, time_range)
+
+    # Deep dive panels placeholder (Phase 8)
     st.markdown("---")
     _render_panels_placeholder(data)
 
     # Footer
-    _render_footer(data.metadata)
+    _render_footer()
 
 
 def _load_styles():
@@ -90,131 +115,6 @@ def _load_styles():
             f"<style>{css_path.read_text()}</style>",
             unsafe_allow_html=True,
         )
-
-
-def _render_header(state: StateManager):
-    """Render dashboard header with title and refresh button."""
-    col1, col2 = st.columns([6, 1])
-
-    with col1:
-        st.title("UK Housing & Economic Dashboard")
-        st.caption("Visualizing monetary policy, housing markets, and economic indicators")
-
-    with col2:
-        if st.button("Refresh Data", type="secondary", use_container_width=True):
-            state.trigger_refresh()
-            st.rerun()
-
-
-def _render_data_status(data):
-    """Render data status summary."""
-    st.subheader("Data Status")
-
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        _render_dataset_status(
-            "Monetary Data",
-            data.monetary is not None,
-            data.metadata.get("monetary"),
-        )
-
-    with col2:
-        _render_dataset_status(
-            "Housing Data",
-            data.housing is not None,
-            data.metadata.get("housing"),
-        )
-
-    with col3:
-        _render_dataset_status(
-            "Economic Data",
-            data.economic is not None,
-            data.metadata.get("economic"),
-        )
-
-
-def _render_dataset_status(name: str, has_data: bool, metadata):
-    """Render status for a single dataset."""
-    if has_data:
-        st.success(f"{name}: Loaded")
-        if metadata:
-            st.caption(f"Last updated: {metadata.age_description}")
-    else:
-        st.error(f"{name}: Not available")
-
-
-def _render_main_content_placeholder(data, time_range: str, region: str):
-    """Placeholder for main content area (Phase 7)."""
-    st.subheader("Dashboard Overview")
-
-    # Hero metrics placeholder
-    st.markdown("#### Key Metrics")
-    metric_cols = st.columns(4)
-
-    if data.monetary and data.monetary.metrics:
-        metrics = data.monetary.metrics
-        with metric_cols[0]:
-            st.metric(
-                "Bank Rate",
-                f"{metrics.current_bank_rate:.2f}%",
-                f"{metrics.bank_rate_change_yoy:+.2f}% YoY",
-            )
-        with metric_cols[1]:
-            st.metric(
-                "2-Year Fixed",
-                f"{metrics.current_mortgage_2yr:.2f}%",
-                f"{metrics.mortgage_2yr_change_yoy:+.2f}% YoY",
-            )
-        with metric_cols[2]:
-            st.metric(
-                "5-Year Fixed",
-                f"{metrics.current_mortgage_5yr:.2f}%",
-                f"{metrics.mortgage_5yr_change_yoy:+.2f}% YoY",
-            )
-
-    if data.housing:
-        from data.models.housing import Region as RegionEnum
-        try:
-            selected_region = RegionEnum.from_string(region)
-            region_data = data.housing.get(selected_region)
-            if region_data and region_data.metrics:
-                with metric_cols[3]:
-                    st.metric(
-                        f"Avg Price ({selected_region.display_name})",
-                        f"£{region_data.metrics.current_average_price:,.0f}",
-                        f"{region_data.metrics.price_change_yoy:+.1f}% YoY",
-                    )
-        except ValueError:
-            pass
-
-    # Charts placeholder
-    st.markdown("#### Charts")
-    st.info(
-        "Chart components (Rates vs Prices, Regional Heat Map, Rate Trends, Transactions) "
-        "will be implemented in Phase 7."
-    )
-
-    # Show data summary
-    left_col, right_col = st.columns(2)
-
-    with left_col:
-        st.markdown("##### Monetary Data Summary")
-        if data.monetary:
-            st.write(f"- Data points: {len(data.monetary)}")
-            if data.monetary.earliest_date and data.monetary.latest_date:
-                st.write(f"- Date range: {data.monetary.earliest_date} to {data.monetary.latest_date}")
-        else:
-            st.write("No monetary data available")
-
-    with right_col:
-        st.markdown("##### Housing Data Summary")
-        if data.housing:
-            st.write(f"- Regions loaded: {len(data.housing)}")
-            regions_list = [r.display_name for r in data.housing.regions.keys()]
-            st.write(f"- Regions: {', '.join(regions_list[:5])}...")
-        else:
-            st.write("No housing data available")
 
 
 def _render_panels_placeholder(data):
@@ -243,7 +143,7 @@ def _render_panels_placeholder(data):
         st.info("Regional comparison panel will be implemented in Phase 8.")
 
 
-def _render_footer(metadata: dict):
+def _render_footer():
     """Render dashboard footer with data attribution."""
     st.markdown(
         """
