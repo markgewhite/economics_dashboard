@@ -1,0 +1,17 @@
+# Development dependencies
+-r requirements.txt
+
+# Testing
+pytest
+pytest-cov
+responses
+
+# Type checking
+mypy
+
+# Code formatting
+black
+isort
+
+# Linting
+flake8

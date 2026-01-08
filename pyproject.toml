@@ -1,0 +1,64 @@
+[project]
+name = "uk-economic-dashboard"
+version = "0.1.0"
+description = "UK Housing & Economic Conditions Dashboard - Portfolio Project"
+readme = "README.md"
+requires-python = ">=3.13"
+license = {text = "MIT"}
+authors = [
+    {name = "Mark White"}
+]
+keywords = ["dashboard", "economics", "housing", "uk", "streamlit", "plotly"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+
+dependencies = [
+    "streamlit",
+    "pandas",
+    "numpy",
+    "plotly",
+    "requests",
+    "tenacity",
+    "python-dotenv",
+    "holidays",
+    "pyarrow",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "responses",
+    "mypy",
+    "black",
+    "isort",
+    "flake8",
+]
+
+[project.urls]
+Repository = "https://github.com/markgewhite/uk-economic-dashboard"
+
+[tool.black]
+line-length = 88
+target-version = ["py313"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"

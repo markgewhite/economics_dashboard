@@ -1,0 +1,158 @@
+DESIGN BRIEF: UK HOUSING & ECONOMIC CONDITIONS DASHBOARD
+
+=== PROJECT OVERVIEW ===
+
+Create a professional economic data dashboard for desktop web that visualizes the relationship between UK monetary policy, housing markets, and economic indicators. This is a portfolio piece demonstrating data science capabilities, so the design should feel authoritative and sophisticated while remaining approachable.
+
+=== DESIGN AESTHETIC ===
+
+Look and Feel:
+- Professional and trustworthy, similar to Bloomberg Terminal or Bank of England publications
+- Modern and clean, not corporate or sterile
+- Data-focused with high information density, but not overwhelming
+- Conveys financial authority while being accessible to non-specialists
+
+Style References:
+- Financial data terminals (Bloomberg, Reuters)
+- Government statistics dashboards (ONS, Federal Reserve)
+- Modern SaaS analytics platforms (Stripe Dashboard, Amplitude)
+
+Overall Impression:
+The design should feel like a tool a serious financial analyst or property investor would use daily. It prioritizes clarity, efficiency, and trust over flashiness.
+
+=== LAYOUT STRUCTURE ===
+
+The dashboard follows a clear visual hierarchy with four main sections:
+
+1. HEADER (Fixed at top)
+   - Dashboard branding/logo on left
+   - Title: "UK Housing & Economic Conditions Dashboard"
+   - Last updated timestamp
+   - Refresh action
+
+2. HERO METRICS SECTION
+   - Four prominent key metrics in a horizontal row
+   - Each shows: icon, label, large value, change indicator (up/down arrow with %)
+   - Metrics are: Bank Rate, 2yr Mortgage Rate, Average House Price, CPI Inflation
+   - These are the "at-a-glance" numbers that matter most
+
+3. INTERACTIVE CONTROLS
+   - Time range selector (6 months, 1 year, 2 years, 5 years, all)
+   - Region filter dropdown
+
+4. MAIN CONTENT AREA
+   Two-column layout with left column wider than right (roughly 60/40 split)
+   
+   LEFT COLUMN (Primary visualizations):
+   - Large chart: "Interest Rates & House Prices" - dual-axis line chart showing correlation
+   - Large chart: "Regional House Price Changes" - UK heat map showing geographic variation
+   
+   RIGHT COLUMN (Supporting data):
+   - Medium chart: "Mortgage Rate Trends" - three overlapping lines
+   - Medium chart: "Transaction Volumes" - bar chart showing market activity
+   - Compact metrics card: "Key Economic Indicators" with three mini metrics (CPI, Employment, Retail)
+
+5. DEEP DIVE PANELS (Bottom section)
+   Three equal-width panels in a row:
+   - Panel 1: "Housing Market Composition" with tabs and donut chart showing breakdowns
+   - Panel 2: "Economic Context" with small trend charts for GDP, unemployment, confidence
+   - Panel 3: "Regional Spotlight" with dropdown to explore specific regions in detail
+
+6. FOOTER
+   - Data source attribution
+   - Portfolio credit
+
+=== CONTENT REQUIREMENTS ===
+
+Charts/Visualizations Needed:
+1. Dual-axis line chart (time series with two Y-axes)
+2. UK regional heat map (choropleth)
+3. Multi-line chart (3 overlapping trends)
+4. Column/bar chart (monthly volumes)
+5. Mini sparkline charts (3 small trend indicators)
+6. Donut chart (composition breakdown)
+7. Horizontal comparison bars (regional benchmarking)
+
+Interactive Elements:
+- Time range button group (toggle between periods)
+- Region dropdown selector
+- Tabs for switching views
+- Chart tooltips on hover
+- Clickable legend items
+
+Data Display Patterns:
+- Large prominent numbers (hero metrics)
+- Up/down indicators with color coding (positive = green, negative = red)
+- Percentage changes with directional arrows
+- Comparison to baseline/average
+- Sparklines showing recent trends
+
+=== FUNCTIONAL REQUIREMENTS ===
+
+Visual Hierarchy:
+Most important → Least important
+1. Hero metrics (largest, most prominent)
+2. Main correlation chart (left column, top)
+3. Supporting charts (right column, medium size)
+4. Deep dive panels (bottom, detailed exploration)
+
+Information Density:
+- Pack information efficiently without feeling cluttered
+- Use white space strategically to create breathing room
+- Group related information visually
+- Use cards/panels to contain distinct data sets
+
+Interaction Patterns:
+- Time range selection affects all time-based charts
+- Region selection filters relevant geographic data
+- Hover reveals detailed tooltips
+- Tabs switch between different views of the same data type
+- Clear visual feedback for interactive elements
+
+Data Relationships to Emphasize:
+- Causation: Interest rates → mortgage rates → house prices → economic impact
+- Geographic variation: Different regions respond differently
+- Time-based trends: Historical patterns and recent changes
+- Composition: Market makeup by type, buyer, payment method
+
+=== RESPONSIVE BEHAVIOR ===
+
+Desktop (primary): Full layout as described
+Tablet: Convert two-column to single column, stack panels vertically
+Mobile: Simplified view with priority content first, reduced chart complexity
+
+=== ACCESSIBILITY ===
+
+- All interactive elements should have clear affordances
+- Sufficient color contrast for readability
+- Icons should be supplemented with text labels
+- Support keyboard navigation
+- Provide alternative text for data visualizations
+
+=== BRANDING NOTES ===
+
+This is a personal portfolio project, so:
+- Design should feel professional but not corporate-branded
+- Emphasis on clarity and data visualization quality
+- Should demonstrate technical sophistication
+- Attribution to data sources (Bank of England, HM Land Registry, ONS) in footer
+
+=== DESIGN DELIVERABLES NEEDED ===
+
+1. Desktop layout (1440px viewport)
+2. Component states (default, hover, active)
+3. Sample data visualizations for each chart type
+4. Responsive layouts (tablet, mobile)
+5. Tooltip designs
+6. Loading states
+
+=== KEY SUCCESS CRITERIA ===
+
+The design succeeds if:
+1. A financial professional immediately understands what they're looking at
+2. The relationship between interest rates and housing is visually clear
+3. Navigation and filtering feel intuitive
+4. Data density is high but comprehensible
+5. The overall impression is "this person knows what they're doing"
+
+Create a desktop web dashboard design that balances professional authority with modern usability, optimized for displaying economic time-series data and geographic variations.

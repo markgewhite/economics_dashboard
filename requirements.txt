@@ -1,0 +1,28 @@
+# UK Economic Dashboard - Dependencies
+# Versions resolved by pip at install time
+
+# Core framework
+streamlit
+
+# Data processing
+pandas
+numpy
+
+# Visualization
+plotly
+
+# HTTP client
+requests
+tenacity
+
+# Configuration
+python-dotenv
+
+# Date/time handling
+holidays
+
+# Data storage (parquet support)
+pyarrow
+
+# Development dependencies (install with: pip install -r requirements-dev.txt)
+# Or install all with: pip install -e ".[dev]"
