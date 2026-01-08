@@ -69,15 +69,22 @@ class CacheMetadata:
         data = json.loads(json_str)
         return cls.from_dict(data)
 
+    def _get_now(self) -> datetime:
+        """Get current time, matching timezone of stored datetimes."""
+        if self.last_fetch.tzinfo is not None:
+            from zoneinfo import ZoneInfo
+            return datetime.now(self.last_fetch.tzinfo)
+        return datetime.now()
+
     @property
     def age_seconds(self) -> float:
         """Return age of cache in seconds."""
-        return (datetime.now() - self.last_fetch).total_seconds()
+        return (self._get_now() - self.last_fetch).total_seconds()
 
     @property
     def age_description(self) -> str:
         """Human-readable description of data age."""
-        age = datetime.now() - self.last_fetch
+        age = self._get_now() - self.last_fetch
         days = age.days
         hours = age.seconds // 3600
         minutes = (age.seconds % 3600) // 60
@@ -93,11 +100,17 @@ class CacheMetadata:
     @property
     def next_update_description(self) -> str:
         """Human-readable description of next expected update."""
-        now = datetime.now()
-        if self.next_expected <= now:
+        now = self._get_now()
+        # Handle timezone mismatch by comparing naive versions if needed
+        next_exp = self.next_expected
+        if next_exp.tzinfo is not None and now.tzinfo is None:
+            next_exp = next_exp.replace(tzinfo=None)
+        elif next_exp.tzinfo is None and now.tzinfo is not None:
+            now = now.replace(tzinfo=None)
+        if next_exp <= now:
             return "Update available"
 
-        delta = self.next_expected - now
+        delta = next_exp - now
         days = delta.days
         hours = delta.seconds // 3600
 
