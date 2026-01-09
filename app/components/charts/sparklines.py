@@ -13,6 +13,7 @@ def render_sparkline(
     positive_is_good: bool = True,
     height: int = 50,
     show_change: bool = True,
+    show_range: bool = False,
 ) -> None:
     """
     Render a minimal sparkline chart.
@@ -22,6 +23,7 @@ def render_sparkline(
         positive_is_good: If True, upward trend is green; if False, downward is green
         height: Chart height in pixels
         show_change: Whether to show percentage change annotation
+        show_range: Whether to show min/max range labels
     """
     # Filter out None values
     clean_values = [v for v in values if v is not None]
@@ -69,6 +71,15 @@ def render_sparkline(
 
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
+    if show_range:
+        min_val = min(clean_values)
+        max_val = max(clean_values)
+        st.markdown(
+            f'<span style="color: #94A3B8; font-size: 10px;">'
+            f'{min_val:.1f} – {max_val:.1f}</span>',
+            unsafe_allow_html=True,
+        )
+
     if show_change:
         change_color = "green" if (pct_change > 0) == positive_is_good else "red"
         st.markdown(
@@ -84,6 +95,7 @@ def render_metric_with_sparkline(
     sparkline_values: list[float],
     positive_is_good: bool = True,
     help_text: Optional[str] = None,
+    show_range: bool = True,
 ) -> None:
     """
     Render a metric value with an inline sparkline.
@@ -94,6 +106,7 @@ def render_metric_with_sparkline(
         sparkline_values: Historical values for sparkline
         positive_is_good: Direction preference for coloring
         help_text: Optional tooltip text
+        show_range: Whether to show min/max range on sparkline
     """
     col1, col2 = st.columns([2, 1])
 
@@ -110,4 +123,5 @@ def render_metric_with_sparkline(
             positive_is_good=positive_is_good,
             height=40,
             show_change=True,
+            show_range=show_range,
         )

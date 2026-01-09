@@ -135,7 +135,11 @@ class LandRegistryClient(BaseAPIClient):
         url = f"{self.base_url}/region/{region.value}.csv"
 
         # Must include _properties to get actual data (not just URIs)
-        params = [f"_properties={','.join(self.PROPERTIES)}"]
+        # _pageSize=200 to get historical data (default is only 10 rows)
+        params = [
+            f"_properties={','.join(self.PROPERTIES)}",
+            "_pageSize=200",
+        ]
 
         if start_month:
             params.append(f"min-refMonth={start_month}")

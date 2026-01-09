@@ -92,7 +92,7 @@ def main():
 
         # Regional heat map
         if data.housing:
-            st.markdown("---")
+            st.markdown("<br>", unsafe_allow_html=True)
             render_regional_heat_map(data.housing)
 
     with right_col:
@@ -102,7 +102,7 @@ def main():
 
         # Transactions chart
         if data.housing:
-            st.markdown("---")
+            st.markdown("<br>", unsafe_allow_html=True)
             render_transactions(data.housing, region, time_range)
 
     # Deep dive panels
