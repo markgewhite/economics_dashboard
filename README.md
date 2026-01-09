@@ -72,7 +72,7 @@ The dashboard will be available at `http://localhost:8501`
 
 ### Live Demo
 
-**[View Live Dashboard](https://your-app-name.streamlit.app)** *(Update after deployment)*
+**[View Live Dashboard](https://markgewhite-economics-dashboard-appmain.streamlit.app)**
 
 ### Deploy to Streamlit Cloud
 
