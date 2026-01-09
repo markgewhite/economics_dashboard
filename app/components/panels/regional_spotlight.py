@@ -84,6 +84,10 @@ def _render_price_comparison(
         st.info("No price data available for selected regions.")
         return
 
+    # Calculate y-axis range with 20% padding for text labels above bars
+    max_price = max(prices)
+    y_max = max_price * 1.20
+
     fig = go.Figure()
 
     fig.add_trace(
@@ -111,6 +115,7 @@ def _render_price_comparison(
             gridcolor=hex_to_rgba(Colors.CHART_1, 0.125),
             tickformat=",.0f",
             tickprefix="£",
+            range=[0, y_max],
         ),
         xaxis=dict(showgrid=False),
     )

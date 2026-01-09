@@ -643,11 +643,22 @@ hr {
     border-radius: var(--border-radius-sm);
     padding: var(--spacing-sm) var(--spacing-md);
     font-size: 13px;
+    color: var(--text-secondary);
 }
 
-.stTabs [aria-selected="true"] {
+.stTabs [data-baseweb="tab"]:hover {
+    background: var(--border-color);
+}
+
+.stTabs [data-baseweb="tab"][aria-selected="true"] {
     background: var(--color-primary);
-    color: white;
+    color: #FFFFFF !important;
+}
+
+/* Ensure text inside selected tab is white */
+.stTabs [data-baseweb="tab"][aria-selected="true"] p,
+.stTabs [data-baseweb="tab"][aria-selected="true"] span {
+    color: #FFFFFF !important;
 }
 
 /* ===== Responsive Adjustments ===== */
