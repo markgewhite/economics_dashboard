@@ -5,7 +5,7 @@ from typing import Optional
 import plotly.graph_objects as go
 import streamlit as st
 
-from app.design_tokens import Colors, Typography
+from app.design_tokens import Colors, Typography, ChartConfig
 
 
 def render_composition_donut(
@@ -153,7 +153,3 @@ def render_property_type_breakdown(
         center_label="Avg Price",
         center_value=f"£{avg_price:,.0f}",
     )
-
-
-# Import ChartConfig for color sequence fallback
-from app.design_tokens import ChartConfig

@@ -58,7 +58,7 @@ def render_rates_vs_prices(
     # Create figure with secondary y-axis
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
-    # Add Bank Rate trace
+    # Add Bank Rate trace (dark color from Figma design)
     bank_rate_dates = [dp.observation_date for dp in monetary_filtered.data_points]
     bank_rates = [dp.bank_rate for dp in monetary_filtered.data_points]
 
@@ -67,26 +67,26 @@ def render_rates_vs_prices(
             x=bank_rate_dates,
             y=bank_rates,
             name="Bank Rate",
-            line=dict(color=Colors.CHART_1, width=2),
+            line=dict(color=Colors.BANK_RATE, width=2),
             hovertemplate="Bank Rate: %{y:.2f}%<extra></extra>",
         ),
         secondary_y=False,
     )
 
-    # Add 2-Year Mortgage Rate trace
+    # Add 2-Year Mortgage Rate trace (red from Figma design)
     mortgage_2yr = [dp.mortgage_2yr for dp in monetary_filtered.data_points]
     fig.add_trace(
         go.Scatter(
             x=bank_rate_dates,
             y=mortgage_2yr,
-            name="2-Year Fixed",
-            line=dict(color=Colors.CHART_2, width=2),
-            hovertemplate="2-Year Fixed: %{y:.2f}%<extra></extra>",
+            name="2yr Mortgage Rate",
+            line=dict(color=Colors.MORTGAGE_2YR, width=2),
+            hovertemplate="2yr Mortgage Rate: %{y:.2f}%<extra></extra>",
         ),
         secondary_y=False,
     )
 
-    # Add house prices on secondary axis
+    # Add house prices on secondary axis (blue from Figma design)
     if housing_filtered and housing_filtered.data_points:
         housing_dates = [dp.ref_month for dp in housing_filtered.data_points]
         housing_prices = [dp.average_price for dp in housing_filtered.data_points]
@@ -95,8 +95,8 @@ def render_rates_vs_prices(
             go.Scatter(
                 x=housing_dates,
                 y=housing_prices,
-                name=f"Avg Price ({region_enum.display_name})",
-                line=dict(color=Colors.CHART_3, width=2, dash="dot"),
+                name="House Price Index",
+                line=dict(color=Colors.HOUSE_PRICE_INDEX, width=2),
                 hovertemplate="Avg Price: £%{y:,.0f}<extra></extra>",
             ),
             secondary_y=True,
@@ -119,11 +119,11 @@ def render_rates_vs_prices(
         hovermode="x unified",
     )
 
-    # Update axes
+    # Update axes with Figma design grid styling
     fig.update_xaxes(
         showgrid=True,
         gridwidth=1,
-        gridcolor=Colors.CHART_1 + "20",
+        gridcolor="#E2E8F0",
         tickformat="%b %Y",
     )
 
@@ -131,7 +131,7 @@ def render_rates_vs_prices(
         title_text="Interest Rate (%)",
         showgrid=True,
         gridwidth=1,
-        gridcolor=Colors.CHART_1 + "20",
+        gridcolor="#E2E8F0",
         secondary_y=False,
     )
 

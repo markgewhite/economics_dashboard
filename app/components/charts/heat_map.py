@@ -35,11 +35,19 @@ def render_regional_heat_map(housing_data: RegionalHousingData) -> None:
     changes = [d["annual_change"] for d in heat_map_data]
     prices = [d["average_price"] for d in heat_map_data]
 
-    # Create colors based on positive/negative values
-    colors = [
-        Colors.POSITIVE if c >= 0 else Colors.NEGATIVE
-        for c in changes
-    ]
+    # Create colors based on Figma design thresholds
+    # Strong growth (>2%): Green, Modest change: Gray, Decline (<-1%): Red
+    def get_heat_color(change: float) -> str:
+        if change > 2.0:
+            return Colors.HEAT_STRONG_GROWTH
+        elif change < -1.0:
+            return Colors.HEAT_DECLINE
+        elif change >= 0:
+            return Colors.POSITIVE
+        else:
+            return Colors.NEGATIVE
+
+    colors = [get_heat_color(c) for c in changes]
 
     # Create horizontal bar chart
     fig = go.Figure()
@@ -74,7 +82,7 @@ def render_regional_heat_map(housing_data: RegionalHousingData) -> None:
             title="Annual Price Change (%)",
             showgrid=True,
             gridwidth=1,
-            gridcolor=Colors.CHART_1 + "20",
+            gridcolor="#E2E8F0",
             zeroline=True,
             zerolinewidth=2,
             zerolinecolor=Colors.TEXT_MUTED,

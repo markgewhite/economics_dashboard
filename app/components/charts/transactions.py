@@ -65,13 +65,13 @@ def render_transactions(
     # Create figure
     fig = go.Figure()
 
-    # Add volume bars
+    # Add volume bars (primary blue from Figma design)
     fig.add_trace(
         go.Bar(
             x=dates,
             y=volumes,
             name="Transactions",
-            marker_color=Colors.CHART_4,
+            marker_color=Colors.PRIMARY,
             hovertemplate="<b>%{x|%b %Y}</b><br>Transactions: %{y:,.0f}<extra></extra>",
         )
     )
@@ -102,7 +102,7 @@ def render_transactions(
             title="Number of Transactions",
             showgrid=True,
             gridwidth=1,
-            gridcolor=Colors.CHART_1 + "20",
+            gridcolor="#E2E8F0",
             tickformat=",",
         ),
     )

@@ -42,36 +42,36 @@ def render_rate_trends(monetary_data: MonetaryTimeSeries, time_range: str) -> No
     # Create figure
     fig = go.Figure()
 
-    # Add Bank Rate
-    fig.add_trace(
-        go.Scatter(
-            x=dates,
-            y=bank_rates,
-            name="Bank Rate",
-            line=dict(color=Colors.CHART_1, width=3),
-            hovertemplate="Bank Rate: %{y:.2f}%<extra></extra>",
-        )
-    )
-
-    # Add 2-Year Fixed
+    # Add 2-Year Fixed (red from Figma design - primary focus)
     fig.add_trace(
         go.Scatter(
             x=dates,
             y=mortgage_2yr,
-            name="2-Year Fixed",
-            line=dict(color=Colors.CHART_2, width=2),
-            hovertemplate="2-Year Fixed: %{y:.2f}%<extra></extra>",
+            name="2yr Fixed",
+            line=dict(color=Colors.MORTGAGE_2YR, width=2),
+            hovertemplate="2yr Fixed: %{y:.2f}%<extra></extra>",
         )
     )
 
-    # Add 5-Year Fixed
+    # Add 5-Year Fixed (orange from Figma design)
     fig.add_trace(
         go.Scatter(
             x=dates,
             y=mortgage_5yr,
-            name="5-Year Fixed",
-            line=dict(color=Colors.CHART_3, width=2),
-            hovertemplate="5-Year Fixed: %{y:.2f}%<extra></extra>",
+            name="5yr Fixed",
+            line=dict(color=Colors.MORTGAGE_5YR, width=2),
+            hovertemplate="5yr Fixed: %{y:.2f}%<extra></extra>",
+        )
+    )
+
+    # Add Bank Rate (dark - tracker/base rate)
+    fig.add_trace(
+        go.Scatter(
+            x=dates,
+            y=bank_rates,
+            name="Tracker",
+            line=dict(color=Colors.TRACKER_RATE, width=2),
+            hovertemplate="Tracker: %{y:.2f}%<extra></extra>",
         )
     )
 
@@ -94,14 +94,14 @@ def render_rate_trends(monetary_data: MonetaryTimeSeries, time_range: str) -> No
         xaxis=dict(
             showgrid=True,
             gridwidth=1,
-            gridcolor=Colors.CHART_1 + "20",
+            gridcolor="#E2E8F0",
             tickformat="%b %Y",
         ),
         yaxis=dict(
             title="Rate (%)",
             showgrid=True,
             gridwidth=1,
-            gridcolor=Colors.CHART_1 + "20",
+            gridcolor="#E2E8F0",
             ticksuffix="%",
         ),
     )
