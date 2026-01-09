@@ -109,6 +109,7 @@ def render_rates_vs_prices(
         paper_bgcolor=Colors.BG_CARD,
         plot_bgcolor=Colors.BG_CARD,
         margin=dict(l=60, r=60, t=20, b=40),
+        height=400,
         legend=dict(
             orientation="h",
             yanchor="bottom",

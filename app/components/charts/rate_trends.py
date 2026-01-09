@@ -82,7 +82,7 @@ def render_rate_trends(monetary_data: MonetaryTimeSeries, time_range: str) -> No
         paper_bgcolor=Colors.BG_CARD,
         plot_bgcolor=Colors.BG_CARD,
         margin=dict(l=50, r=20, t=20, b=40),
-        height=300,
+        height=400,
         legend=dict(
             orientation="h",
             yanchor="bottom",
@@ -107,20 +107,3 @@ def render_rate_trends(monetary_data: MonetaryTimeSeries, time_range: str) -> No
     )
 
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
-
-    # Show current rates summary
-    if filtered.data_points:
-        latest = filtered.data_points[-1]
-        col1, col2, col3 = st.columns(3)
-
-        with col1:
-            if latest.bank_rate is not None:
-                st.metric("Current Bank Rate", f"{latest.bank_rate:.2f}%")
-
-        with col2:
-            if latest.mortgage_2yr is not None:
-                st.metric("Current 2-Year", f"{latest.mortgage_2yr:.2f}%")
-
-        with col3:
-            if latest.mortgage_5yr is not None:
-                st.metric("Current 5-Year", f"{latest.mortgage_5yr:.2f}%")

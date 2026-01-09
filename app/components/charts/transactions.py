@@ -92,7 +92,7 @@ def render_transactions(
         paper_bgcolor=Colors.BG_CARD,
         plot_bgcolor=Colors.BG_CARD,
         margin=dict(l=50, r=20, t=20, b=40),
-        height=300,
+        height=400,
         showlegend=False,
         xaxis=dict(
             showgrid=False,

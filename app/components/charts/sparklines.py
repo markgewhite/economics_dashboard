@@ -14,6 +14,7 @@ def render_sparkline(
     height: int = 50,
     show_change: bool = True,
     show_range: bool = False,
+    show_axes: bool = False,
 ) -> None:
     """
     Render a minimal sparkline chart.
@@ -24,6 +25,7 @@ def render_sparkline(
         height: Chart height in pixels
         show_change: Whether to show percentage change annotation
         show_range: Whether to show min/max range labels
+        show_axes: Whether to show minimal y-axis with min/max values
     """
     # Filter out None values
     clean_values = [v for v in values if v is not None]
@@ -44,6 +46,10 @@ def render_sparkline(
     else:
         line_color = Colors.NEGATIVE if is_positive_trend else Colors.POSITIVE
 
+    # Calculate min/max for axis
+    min_val = min(clean_values)
+    max_val = max(clean_values)
+
     # Create sparkline
     fig = go.Figure()
 
@@ -58,24 +64,42 @@ def render_sparkline(
         )
     )
 
-    # Minimal layout
-    fig.update_layout(
-        height=height,
-        margin=dict(l=0, r=0, t=0, b=0),
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        showlegend=False,
-        xaxis=dict(visible=False),
-        yaxis=dict(visible=False),
-    )
+    # Layout with optional axes
+    if show_axes:
+        fig.update_layout(
+            height=height,
+            margin=dict(l=35, r=5, t=5, b=5),
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            showlegend=False,
+            xaxis=dict(visible=False),
+            yaxis=dict(
+                visible=True,
+                showgrid=False,
+                showline=False,
+                tickmode="array",
+                tickvals=[min_val, max_val],
+                ticktext=[f"{min_val:.1f}", f"{max_val:.1f}"],
+                tickfont=dict(size=9, color="#64748B"),
+                side="left",
+            ),
+        )
+    else:
+        fig.update_layout(
+            height=height,
+            margin=dict(l=0, r=0, t=0, b=0),
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            showlegend=False,
+            xaxis=dict(visible=False),
+            yaxis=dict(visible=False),
+        )
 
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
-    if show_range:
-        min_val = min(clean_values)
-        max_val = max(clean_values)
+    if show_range and not show_axes:
         st.markdown(
-            f'<span style="color: #94A3B8; font-size: 10px;">'
+            f'<span style="color: #64748B; font-size: 12px;">'
             f'{min_val:.1f} – {max_val:.1f}</span>',
             unsafe_allow_html=True,
         )
@@ -121,7 +145,8 @@ def render_metric_with_sparkline(
         render_sparkline(
             sparkline_values,
             positive_is_good=positive_is_good,
-            height=40,
+            height=80,
             show_change=True,
-            show_range=show_range,
+            show_range=False,
+            show_axes=True,
         )

@@ -14,7 +14,7 @@ def render_composition_donut(
     title: Optional[str] = None,
     center_label: Optional[str] = None,
     center_value: Optional[str] = None,
-    height: int = 300,
+    height: int = 350,
 ) -> None:
     """
     Render a donut chart showing composition/breakdown.

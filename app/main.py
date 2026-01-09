@@ -81,28 +81,34 @@ def main():
     st.markdown("---")
     time_range, region = render_filters(state)
 
-    # Main content area - two columns
+    # Main content area - Row 1: Rates vs Prices charts
     st.markdown("---")
-    left_col, right_col = st.columns([3, 2])
+    row1_left, row1_right = st.columns([3, 2])
 
-    with left_col:
+    with row1_left:
         # Dual-axis chart: rates vs prices
         if data.monetary and data.housing:
             render_rates_vs_prices(data, time_range, region)
 
-        # Regional heat map
-        if data.housing:
-            st.markdown("<br>", unsafe_allow_html=True)
-            render_regional_heat_map(data.housing)
-
-    with right_col:
+    with row1_right:
         # Rate trends chart
         if data.monetary:
             render_rate_trends(data.monetary, time_range)
 
+    # Divider between chart rows (full-width because we're outside columns)
+    st.markdown("---")
+
+    # Row 2: Regional/Transaction charts
+    row2_left, row2_right = st.columns([3, 2])
+
+    with row2_left:
+        # Regional heat map
+        if data.housing:
+            render_regional_heat_map(data.housing)
+
+    with row2_right:
         # Transactions chart
         if data.housing:
-            st.markdown("<br>", unsafe_allow_html=True)
             render_transactions(data.housing, region, time_range)
 
     # Deep dive panels
