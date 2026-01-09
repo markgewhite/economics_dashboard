@@ -32,13 +32,16 @@ def render_sparkline(
         height: Chart height in pixels
         show_change: Whether to show percentage change annotation
     """
-    if not values or len(values) < 2:
+    # Filter out None values
+    clean_values = [v for v in values if v is not None]
+
+    if not clean_values or len(clean_values) < 2:
         st.write("--")
         return
 
     # Calculate change
-    first_val = values[0] if values[0] != 0 else 0.001
-    last_val = values[-1]
+    first_val = clean_values[0] if clean_values[0] != 0 else 0.001
+    last_val = clean_values[-1]
     pct_change = ((last_val - first_val) / abs(first_val)) * 100
 
     # Determine color based on trend direction and preference
@@ -53,7 +56,7 @@ def render_sparkline(
 
     fig.add_trace(
         go.Scatter(
-            y=values,
+            y=clean_values,
             mode="lines",
             line=dict(color=line_color, width=2),
             fill="tozeroy",
