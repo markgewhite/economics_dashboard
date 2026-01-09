@@ -5,16 +5,7 @@ from typing import Optional
 import plotly.graph_objects as go
 import streamlit as st
 
-from app.design_tokens import Colors
-
-
-def _hex_to_rgba(hex_color: str, alpha: float = 0.125) -> str:
-    """Convert hex color to rgba string for Plotly compatibility."""
-    hex_color = hex_color.lstrip("#")
-    r = int(hex_color[0:2], 16)
-    g = int(hex_color[2:4], 16)
-    b = int(hex_color[4:6], 16)
-    return f"rgba({r}, {g}, {b}, {alpha})"
+from app.design_tokens import Colors, hex_to_rgba
 
 
 def render_sparkline(
@@ -60,7 +51,7 @@ def render_sparkline(
             mode="lines",
             line=dict(color=line_color, width=2),
             fill="tozeroy",
-            fillcolor=_hex_to_rgba(line_color, 0.125),
+            fillcolor=hex_to_rgba(line_color, 0.125),
             hoverinfo="skip",
         )
     )

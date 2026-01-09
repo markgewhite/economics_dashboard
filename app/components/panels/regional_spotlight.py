@@ -3,7 +3,7 @@
 import streamlit as st
 import plotly.graph_objects as go
 
-from app.design_tokens import Colors, Typography
+from app.design_tokens import Colors, Typography, hex_to_rgba
 from data.models.housing import RegionalHousingData, Region
 
 
@@ -108,7 +108,7 @@ def _render_price_comparison(
         yaxis=dict(
             showgrid=True,
             gridwidth=1,
-            gridcolor=Colors.CHART_1 + "20",
+            gridcolor=hex_to_rgba(Colors.CHART_1, 0.125),
             tickformat=",.0f",
             tickprefix="£",
         ),
@@ -163,7 +163,7 @@ def _render_change_comparison(
         yaxis=dict(
             showgrid=True,
             gridwidth=1,
-            gridcolor=Colors.CHART_1 + "20",
+            gridcolor=hex_to_rgba(Colors.CHART_1, 0.125),
             tickformat="+.1f",
             ticksuffix="%",
             zeroline=True,
