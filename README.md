@@ -68,6 +68,39 @@ A Streamlit dashboard visualizing relationships between UK monetary policy, hous
 
 The dashboard will be available at `http://localhost:8501`
 
+## Deployment
+
+### Live Demo
+
+**[View Live Dashboard](https://your-app-name.streamlit.app)** *(Update after deployment)*
+
+### Deploy to Streamlit Cloud
+
+1. Push your code to a GitHub repository
+
+2. Go to [share.streamlit.io](https://share.streamlit.io)
+
+3. Click "New app" and configure:
+   - **Repository**: Select your GitHub repo
+   - **Branch**: `master` (or your default branch)
+   - **Main file path**: `app/main.py`
+
+4. Click "Deploy"
+
+No secrets are required - all data sources use public APIs. The dashboard will automatically:
+- Create cache directories on first run
+- Fetch data from Bank of England, HM Land Registry, and ONS
+- Store cached data for subsequent requests
+
+### Environment Variables (Optional)
+
+These can be set in Streamlit Cloud's "Secrets" section if needed:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `CACHE_DIR` | Cache storage path | `./storage` |
+| `LOG_LEVEL` | Logging verbosity | `INFO` |
+
 ## Project Structure
 
 ```

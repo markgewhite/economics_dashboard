@@ -1,0 +1,32 @@
+# Streamlit configuration for UK Housing & Economic Dashboard
+# https://docs.streamlit.io/library/advanced-features/configuration
+
+[theme]
+# Primary accent color (matches design token PRIMARY)
+primaryColor = "#3B82F6"
+
+# Background colors (matches design tokens)
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F8FAFC"
+
+# Text color (matches TEXT_PRIMARY)
+textColor = "#1E293B"
+
+# Font (Note: Streamlit has limited font support)
+font = "sans serif"
+
+[server]
+# Enable CORS for Streamlit Cloud
+enableCORS = false
+enableXsrfProtection = true
+
+# File watcher settings
+fileWatcherType = "poll"
+
+[browser]
+# Disable usage statistics collection
+gatherUsageStats = false
+
+[runner]
+# Magic commands disabled for cleaner code
+magicEnabled = false
