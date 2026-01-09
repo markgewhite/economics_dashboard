@@ -22,7 +22,7 @@ class Region(Enum):
     LONDON = "london"
     SOUTH_EAST = "south-east"
     SOUTH_WEST = "south-west"
-    EAST_OF_ENGLAND = "east-anglia"
+    EAST_OF_ENGLAND = "east-of-england"
     EAST_MIDLANDS = "east-midlands"
     WEST_MIDLANDS = "west-midlands"
     YORKSHIRE_AND_HUMBER = "yorkshire-and-the-humber"
@@ -41,7 +41,7 @@ class Region(Enum):
             "london": "London",
             "south-east": "South East",
             "south-west": "South West",
-            "east-anglia": "East of England",
+            "east-of-england": "East of England",
             "east-midlands": "East Midlands",
             "west-midlands": "West Midlands",
             "yorkshire-and-the-humber": "Yorkshire and The Humber",

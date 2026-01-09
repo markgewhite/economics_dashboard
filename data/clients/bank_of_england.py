@@ -122,6 +122,7 @@ class BankOfEnglandClient(BaseAPIClient):
         date_format = "%d/%b/%Y"
 
         params = {
+            "csv.x": "yes",  # Required to get CSV response
             "Datefrom": start_date.strftime(date_format),
             "Dateto": end_date.strftime(date_format),
             "SeriesCodes": ",".join(codes),

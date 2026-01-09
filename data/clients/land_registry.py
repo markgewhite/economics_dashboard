@@ -111,6 +111,20 @@ class LandRegistryClient(BaseAPIClient):
 
         return results
 
+    # Properties to request from API
+    PROPERTIES = [
+        "refMonth",
+        "averagePrice",
+        "housePriceIndex",
+        "percentageChange",
+        "percentageAnnualChange",
+        "salesVolume",
+        "averagePriceDetached",
+        "averagePriceSemiDetached",
+        "averagePriceTerraced",
+        "averagePriceFlatMaisonette",
+    ]
+
     def _build_url(
         self,
         region: Region,
@@ -120,14 +134,15 @@ class LandRegistryClient(BaseAPIClient):
         """Construct API URL for region."""
         url = f"{self.base_url}/region/{region.value}.csv"
 
-        params = []
+        # Must include _properties to get actual data (not just URIs)
+        params = [f"_properties={','.join(self.PROPERTIES)}"]
+
         if start_month:
             params.append(f"min-refMonth={start_month}")
         if end_month:
             params.append(f"max-refMonth={end_month}")
 
-        if params:
-            url += "?" + "&".join(params)
+        url += "?" + "&".join(params)
 
         return url
 
@@ -139,21 +154,21 @@ class LandRegistryClient(BaseAPIClient):
         """Parse CSV response from Land Registry."""
         df = pd.read_csv(io.StringIO(content))
 
-        # Select and rename relevant columns
+        # API returns lowercase column names with spaces
         column_mapping = {
-            "refMonth": "ref_month",
-            "averagePrice": "average_price",
-            "housePriceIndex": "house_price_index",
-            "percentageChange": "monthly_change_pct",
-            "percentageAnnualChange": "annual_change_pct",
-            "salesVolume": "sales_volume",
-            "averagePriceDetached": "price_detached",
-            "averagePriceSemiDetached": "price_semi_detached",
-            "averagePriceTerraced": "price_terraced",
-            "averagePriceFlat": "price_flat",
+            "ref month": "ref_month",
+            "average price": "average_price",
+            "house price index": "house_price_index",
+            "percentage change": "monthly_change_pct",
+            "percentage annual change": "annual_change_pct",
+            "sales volume": "sales_volume",
+            "average price detached": "price_detached",
+            "average price semi detached": "price_semi_detached",
+            "average price terraced": "price_terraced",
+            "average price flat maisonette": "price_flat",
         }
 
-        # Keep only columns we need
+        # Keep only columns we need (drop 'uri' column)
         available = [c for c in column_mapping.keys() if c in df.columns]
         df = df[available].rename(columns=column_mapping)
 
