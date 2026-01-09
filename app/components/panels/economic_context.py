@@ -50,6 +50,15 @@ def _render_cpi_section(economic_data: EconomicTimeSeries, metrics) -> None:
 
     if metrics and metrics.current_cpi is not None:
         current_value = f"{metrics.current_cpi:.1f}%"
+
+        # Build caption based on target comparison
+        if metrics.current_cpi > 2:
+            caption = f"📈 {metrics.current_cpi - 2:.1f}pp above 2% target"
+        elif metrics.current_cpi < 2:
+            caption = f"📉 {2 - metrics.current_cpi:.1f}pp below 2% target"
+        else:
+            caption = "✓ At 2% target"
+
         # For inflation, lower is generally better (positive_is_good=False)
         render_metric_with_sparkline(
             label="CPI Inflation",
@@ -57,15 +66,8 @@ def _render_cpi_section(economic_data: EconomicTimeSeries, metrics) -> None:
             sparkline_values=cpi_values[-12:] if len(cpi_values) > 12 else cpi_values,
             positive_is_good=False,
             help_text="Annual rate of inflation (target: 2%)",
+            caption=caption,
         )
-
-        # Show target comparison
-        if metrics.current_cpi > 2:
-            st.caption(f"📈 {metrics.current_cpi - 2:.1f}pp above 2% target")
-        elif metrics.current_cpi < 2:
-            st.caption(f"📉 {2 - metrics.current_cpi:.1f}pp below 2% target")
-        else:
-            st.caption("✓ At 2% target")
     else:
         st.write("CPI data not available")
 
@@ -94,6 +96,15 @@ def _render_retail_section(economic_data: EconomicTimeSeries, metrics) -> None:
 
     if metrics and metrics.current_retail_index is not None:
         current_value = f"{metrics.current_retail_index:.1f}"
+
+        # Build caption based on YoY change
+        caption = None
+        if metrics.retail_change_yoy is not None:
+            if metrics.retail_change_yoy > 0:
+                caption = f"📈 {metrics.retail_change_yoy:+.1f}% vs last year"
+            else:
+                caption = f"📉 {metrics.retail_change_yoy:+.1f}% vs last year"
+
         # Higher retail is generally positive
         render_metric_with_sparkline(
             label="Retail Sales Index",
@@ -101,13 +112,7 @@ def _render_retail_section(economic_data: EconomicTimeSeries, metrics) -> None:
             sparkline_values=retail_values[-12:] if len(retail_values) > 12 else retail_values,
             positive_is_good=True,
             help_text="Index of retail sales volume (seasonally adjusted)",
+            caption=caption,
         )
-
-        # Show YoY change if available
-        if metrics.retail_change_yoy is not None:
-            if metrics.retail_change_yoy > 0:
-                st.caption(f"📈 {metrics.retail_change_yoy:+.1f}% vs last year")
-            else:
-                st.caption(f"📉 {metrics.retail_change_yoy:+.1f}% vs last year")
     else:
         st.write("Retail sales data not available")

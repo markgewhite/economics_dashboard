@@ -65,18 +65,35 @@ def render_sparkline(
     )
 
     # Layout with optional axes
+    num_points = len(clean_values)
+
+    # Add 25% padding to y-axis range so line doesn't touch edges
+    y_range_span = max_val - min_val
+    y_padding = y_range_span * 0.25
+    y_min = min_val - y_padding
+    y_max = max_val + y_padding
+
     if show_axes:
         fig.update_layout(
             height=height,
-            margin=dict(l=35, r=5, t=5, b=5),
+            margin=dict(l=35, r=35, t=5, b=18),
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
             showlegend=False,
-            xaxis=dict(visible=False),
+            xaxis=dict(
+                visible=True,
+                showgrid=False,
+                showline=False,
+                tickmode="array",
+                tickvals=[0, num_points - 1],
+                ticktext=[f"-{num_points}m", "Now"],
+                tickfont=dict(size=8, color="#64748B"),
+            ),
             yaxis=dict(
                 visible=True,
                 showgrid=False,
                 showline=False,
+                range=[y_min, y_max],
                 tickmode="array",
                 tickvals=[min_val, max_val],
                 ticktext=[f"{min_val:.1f}", f"{max_val:.1f}"],
@@ -119,7 +136,7 @@ def render_metric_with_sparkline(
     sparkline_values: list[float],
     positive_is_good: bool = True,
     help_text: Optional[str] = None,
-    show_range: bool = True,
+    caption: Optional[str] = None,
 ) -> None:
     """
     Render a metric value with an inline sparkline.
@@ -129,24 +146,30 @@ def render_metric_with_sparkline(
         value: Current value as formatted string
         sparkline_values: Historical values for sparkline
         positive_is_good: Direction preference for coloring
-        help_text: Optional tooltip text
-        show_range: Whether to show min/max range on sparkline
+        help_text: Optional descriptive text (displays full width below)
+        caption: Optional highlight caption (e.g., "📈 1.5pp above target")
     """
-    col1, col2 = st.columns([2, 1])
+    # Row 1: Label/Value/Caption on left, Sparkline on right
+    col1, col2 = st.columns([1, 1])
 
     with col1:
         st.markdown(f"**{label}**")
         st.markdown(f"<span style='font-size: 24px; font-weight: 600;'>{value}</span>",
                    unsafe_allow_html=True)
-        if help_text:
-            st.caption(help_text)
+        # Caption goes directly below the value
+        if caption:
+            st.caption(caption)
 
     with col2:
         render_sparkline(
             sparkline_values,
             positive_is_good=positive_is_good,
-            height=80,
-            show_change=True,
+            height=100,
+            show_change=False,
             show_range=False,
             show_axes=True,
         )
+
+    # Help text extends full width (outside columns)
+    if help_text:
+        st.caption(help_text)
